@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ScalaCompilerConfiguration">
+    <profile name="SBT 1" modules="shapes-oo-scala-algebraic">
+      <option name="higherKinds" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-Ypartial-unification" />
+      </parameters>
+      <plugins>
+        <plugin path="C:\Users\Nathnael\.ivy2\cache\org.spire-math\kind-projector_2.12\jars\kind-projector_2.12-0.9.3.jar" />
+      </plugins>
+    </profile>
+  </component>
+</project>
