@@ -19,7 +19,7 @@ object behaviorTests extends Properties("behaviorTests")  {
   import behaviors._
 
 
-  
+
   property("size1") = Prop { (fixtures.simpleEllipse cata size) == 1}
   property("size2") = Prop { (fixtures.simpleRectangle cata size) == 1 }
   property("size1") = Prop { (fixtures.simpleLocation cata size) == 1}

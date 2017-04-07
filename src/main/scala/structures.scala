@@ -14,6 +14,7 @@ object structures {
     * @tparam A
     */
 
+  //sealed trait Sh
   sealed trait ShapeF[+A]
 
   case class Rectangle[A](width: Int, height: Int) extends ShapeF[A]
@@ -37,7 +38,7 @@ object structures {
 
   }
 
-  implicit object shapeFFunctor extends Functor[ShapeF]{
+  object shapeFFunctor extends Functor[ShapeF]{
     def map[A,B](fa: ShapeF[A])(f: A => B): ShapeF[B] = fa match{
       case Rectangle(width, height) => Rectangle[B](width,height)
       case Location(x,y,shape)=> Location(x,y,f(shape))
@@ -55,6 +56,18 @@ object structures {
     def ellipse(majorAxis: Int, minorAxis: Int) = Fix[ShapeF](Ellipse(majorAxis,minorAxis))
     def location(x: Int, y: Int, shape: Shape) = Fix[ShapeF](Location(x,y,shape))
     def group(shapes: Shape*) = Fix[ShapeF](Group(shapes.toList))
+  }
+
+  implicit object exprFTraverse extends Traverse[ShapeF] {
+    import scalaz.std.list._
+    import scalaz.syntax.applicative._ // η = point, ∘ = map, ⊛ = apply2
+    def traverseImpl[G[_], A, B](fa: ShapeF[A])(f: A => G[B])(implicit a: Applicative[G]): G[ShapeF[B]] = fa match {
+      case Circle(v) => (Circle(v): ShapeF[B]).η[G[?]]
+      case Rectangle(r,l)   => (Rectangle(r,l): ShapeF[B]).η[G[?]]
+      case Ellipse(l, r)  => (Ellipse(l,r): ShapeF[B]).η[G[?]]
+      case Location(l, r, s) => f(s)∘ (Location(l,r, _))
+      case Group(es)   => a.traverse(es)(f) ∘ (Group(_))
+    }
   }
 
 
